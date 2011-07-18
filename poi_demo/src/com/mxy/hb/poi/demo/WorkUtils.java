@@ -3,6 +3,7 @@ package com.mxy.hb.poi.demo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,70 +33,96 @@ public class WorkUtils {
 		logger = null;
 	}
 
+<<<<<<< .mine
+	public void refinePrintSettingForWorkbook(String filePath) throws Exception {
+		Workbook wb = new HSSFWorkbook(new FileInputStream(filePath));
+=======
 	@Test
 	public void refinePrintSettingForWorkbook() throws Exception {
 		Workbook wb = new HSSFWorkbook(new FileInputStream(
 				"fls/Sample.xls"));
+>>>>>>> .r7
 		int sheetNum = wb.getNumberOfSheets();
 		for (int i = 0; i < sheetNum; i++) {
 			refinePrintSettingForOneSheet(wb.getSheetAt(i));
 			logger.info("======================one sheet processed======================");
 		}
+<<<<<<< .mine
+		FileOutputStream fileOut = new FileOutputStream(filePath);
+=======
 		FileOutputStream fileOut = new FileOutputStream("fls/Sample-del.xls");
+>>>>>>> .r7
 		wb.write(fileOut);
 		fileOut.close();
 	}
 
 	public void refinePrintSettingForOneSheet(Sheet sheet) throws Exception {
-		Footer footer = sheet.getFooter();
-		Header header = sheet.getHeader();
-		String sheetName = sheet.getSheetName();
-		String footerHeaderTitle = sheetName + "  Page " + HeaderFooter.page()
-				+ " of " + HeaderFooter.numPages();
-		footer.setCenter(footerHeaderTitle);
-		header.setCenter(footerHeaderTitle);
-
 		
-
 		PrintSetup ps = sheet.getPrintSetup();
 
 		Map<String, Integer> sheetDistanceMap = getSheetHeightAndWidth(sheet);
 		int height = sheetDistanceMap.get("height");
 		int width = sheetDistanceMap.get("width");
+		
+		ps.setFooterMargin(0.0);
+		ps.setHeaderMargin(0.0);
+
+		sheet.setMargin(Sheet.TopMargin, 0.0);
+		sheet.setMargin(Sheet.BottomMargin, 0.0);
+		sheet.setMargin(Sheet.LeftMargin, 0.0);
+		sheet.setMargin(Sheet.RightMargin, 0.0);
+		
+		sheet.setAutobreaks(true);
+		sheet.setHorizontallyCenter(true);
+		sheet.setVerticallyCenter(true);
 
 		if (height < 17000 && width < 21000) {
 			ps.setFitHeight((short) 1);
 			ps.setFitWidth((short) 1);
-			sheet.setHorizontallyCenter(true);
-			sheet.setVerticallyCenter(true);
 			logger.info("===**refinePrintSettingForOneSheet*=== one page, Portrait.");
-		} else if (width < 30000 && width >= 21000) {
-			
+		} else if (width >= 21000 && width<45000) {
 			ps.setLandscape(true);
+			ps.setFitWidth((short) 1);
 			if (height < 9000) {
-				sheet.setAutobreaks(true);
 				ps.setFitHeight((short) 1);
-				ps.setFitWidth((short) 1);
-				sheet.setVerticallyCenter(true);
-				sheet.setHorizontallyCenter(true);
 				logger.info("===**refinePrintSettingForOneSheet*=== one page, Landscape, HorizontallyCenter, VerticallyCenter.");
 			} else {
-				sheet.setAutobreaks(true);
-				ps.setFitHeight((short) 0);
-				ps.setFitWidth((short) 1);
 				sheet.setVerticallyCenter(false);
-				sheet.setHorizontallyCenter(true);
+				ps.setFitHeight((short) 0);
 				logger.info("===**refinePrintSettingForOneSheet*=== more than one page, Landscape, HorizontallyCenter.");
 			}
 		} else {
-			sheet.setHorizontallyCenter(true);
-			sheet.setVerticallyCenter(true);
-			logger.info("===**refinePrintSettingForOneSheet*=== other distance case.");
+			ps.setPaperSize(PrintSetup.A3_PAPERSIZE);
+			ps.setLandscape(true);
+			ps.setFitWidth((short) 1);
+			if (height < 18000) {
+				ps.setFitHeight((short) 1);
+				logger.info("===**refinePrintSettingForOneSheet*=== one page, [A3] Landscape, HorizontallyCenter, VerticallyCenter.");
+			} else {
+				sheet.setVerticallyCenter(false);
+				ps.setFitHeight((short) 0);
+				logger.info("===**refinePrintSettingForOneSheet*=== more than one page, [A3] Landscape, HorizontallyCenter.");
+			}
 		}
-		/*
-		 * File file = new File("fls/Book2.xls"); if(file.exists()){
-		 * file.delete(); }
-		 */
+		
+		//comment next line if need print all in center
+		sheet.setVerticallyCenter(false);
+		
+		
+		sheet.setMargin(Sheet.TopMargin, 0.6);
+		sheet.setMargin(Sheet.BottomMargin, 0.6);
+		sheet.setMargin(Sheet.LeftMargin, 0.5);
+		sheet.setMargin(Sheet.RightMargin, 0.5);
+
+		ps.setFooterMargin(0.3);
+		ps.setHeaderMargin(0.3);
+		
+		Footer footer = sheet.getFooter();
+		Header header = sheet.getHeader();
+		String sheetName = sheet.getSheetName();
+		header.setRight(HeaderFooter.fontSize((short)10) + sheetName + "  Page " + HeaderFooter.page()
+				+ " of " + HeaderFooter.numPages());
+		footer.setRight(HeaderFooter.fontSize((short)10) + "Create Date:"+ new Date()+ "[need format!]");
 	}
 
 	public Map<String, Integer> getSheetHeightAndWidth(Sheet sheet)
@@ -120,9 +147,12 @@ public class WorkUtils {
 		Map<String, Integer> retMap = new HashMap<String, Integer>();
 		retMap.put("height", height);
 		retMap.put("width", width);
-		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Sheet Name [" + sheet.getSheetName() + "]");
-		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Height [" + height + "]");
-		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Width [" + width + "]");
+		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Sheet Name ["
+				+ sheet.getSheetName() + "]");
+		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Height ["
+				+ height + "]");
+		logger.info("===***getSheetHeightAndWidth(Sheet sheet)=== Width ["
+				+ width + "]");
 		return retMap;
 	}
 
