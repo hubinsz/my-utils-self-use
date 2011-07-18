@@ -113,10 +113,12 @@ public class PoiDemo001 {
 		cell.setCellValue(1);
 
 		// Or do it on one line.
-		row.createCell(1).setCellValue(1.2);
+		row.createCell(1).setCellValue(1.20);
 		row.createCell(2).setCellValue(
 				createHelper.createRichTextString("This is a string"));
 		row.createCell(3).setCellValue(true);
+		row.createCell(4).setCellValue(createHelper.createRichTextString("1.20"));
+		row.createCell(5).setCellValue(createHelper.createRichTextString("2011-07-16"));
 
 		// Write the output to a file
 		FileOutputStream fileOut = new FileOutputStream("fls/workbook003.xls");
@@ -257,6 +259,7 @@ public class PoiDemo001 {
 
 		// Style the cell with borders all around.
 		CellStyle style = wb.createCellStyle();
+		//
 		style.setBorderBottom(CellStyle.BORDER_THIN);
 		style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
 		style.setBorderLeft(CellStyle.BORDER_THIN);
@@ -265,6 +268,7 @@ public class PoiDemo001 {
 		style.setRightBorderColor(IndexedColors.BLUE.getIndex());
 		style.setBorderTop(CellStyle.BORDER_MEDIUM_DASHED);
 		style.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		//
 		cell.setCellStyle(style);
 
 		// Write the output to a file
@@ -338,6 +342,25 @@ public class PoiDemo001 {
 		extractor.setIncludeSheetNames(false);
 		String text = extractor.getText();
 		logger.debug(text);
+	}
+	
+	// re-set printer
+	@Test
+	public void resetPrinter() throws Exception {
+		InputStream inp = new FileInputStream("fls/workbook100.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(new POIFSFileSystem(inp));
+		Sheet sheet = wb.getSheetAt(0);
+		PrintSetup ps = sheet.getPrintSetup();
+		ps.setLandscape(true);
+		sheet.setVerticallyCenter(true);
+		sheet.setHorizontallyCenter(true);
+
+		
+		// Write the output to a file
+		FileOutputStream fileOut = new FileOutputStream("fls/workbook011.xls");
+		wb.write(fileOut);
+		fileOut.close();
+
 	}
 
 	// Fills and colors
@@ -611,6 +634,31 @@ public class PoiDemo001 {
 		}
 
 		FileOutputStream fileOut = new FileOutputStream("fls/workbook018.xls");
+		wb.write(fileOut);
+		fileOut.close();
+	}
+	// setLandscape
+	@Test
+	public void setLandscapeDemo001() throws Exception {
+		Workbook wb = new HSSFWorkbook();
+		Sheet sheet = wb.createSheet("format sheet");
+		PrintSetup ps = sheet.getPrintSetup();
+		
+		
+		sheet.setAutobreaks(true);
+		ps.setFitHeight((short) 1);
+		ps.setFitWidth((short) 1);
+		ps.setLandscape(true);
+		// Create various cells and rows for spreadsheet.
+		for (int i = 0; i < 70; i++) {
+			Row row = sheet.createRow(i);
+			for (int j = 0; j < 15; j++) {
+				Cell cell = row.createCell(j);
+				cell.setCellValue("hb" + j + i);
+			}
+		}
+		
+		FileOutputStream fileOut = new FileOutputStream("fls/workbook100.xls");
 		wb.write(fileOut);
 		fileOut.close();
 	}
