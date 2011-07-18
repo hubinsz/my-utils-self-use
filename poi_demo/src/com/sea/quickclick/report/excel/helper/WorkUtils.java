@@ -1,4 +1,4 @@
-package com.mxy.hb.poi.demo;
+package com.sea.quickclick.report.excel.helper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +24,7 @@ public class WorkUtils {
 
 	@BeforeClass
 	public static void init() {
-		logger = Logger.getLogger(PoiDemo001.class);
+		logger = Logger.getLogger(WorkUtils.class);
 	}
 
 	@AfterClass
@@ -38,7 +38,7 @@ public class WorkUtils {
 				"fls/Sample.xls"));
 		int sheetNum = wb.getNumberOfSheets();
 		for (int i = 0; i < sheetNum; i++) {
-			refinePrintSettingForOneSheet(wb.getSheetAt(i));
+			refinePrintSettingForOneSheet(wb.getSheetAt(i),i);
 			logger.info("======================one sheet processed======================");
 		}
 		FileOutputStream fileOut = new FileOutputStream("fls/Sample-del.xls");
@@ -46,7 +46,7 @@ public class WorkUtils {
 		fileOut.close();
 	}
 
-	public void refinePrintSettingForOneSheet(Sheet sheet) throws Exception {
+	public void refinePrintSettingForOneSheet(Sheet sheet,int i) throws Exception {
 		Footer footer = sheet.getFooter();
 		Header header = sheet.getHeader();
 		String sheetName = sheet.getSheetName();
@@ -54,15 +54,19 @@ public class WorkUtils {
 				+ " of " + HeaderFooter.numPages();
 		footer.setCenter(footerHeaderTitle);
 		header.setCenter(footerHeaderTitle);
-
 		
+		sheet.getWorkbook().setRepeatingRowsAndColumns(i, -1, -1, 0, 2);
+
 
 		PrintSetup ps = sheet.getPrintSetup();
 
 		Map<String, Integer> sheetDistanceMap = getSheetHeightAndWidth(sheet);
 		int height = sheetDistanceMap.get("height");
 		int width = sheetDistanceMap.get("width");
-
+		
+		logger.info("xxxxxxxxxx"+ps.getFooterMargin());
+		logger.info("xxxxxxxxxx"+ps.getFooterMargin());
+		
 		if (height < 17000 && width < 21000) {
 			ps.setFitHeight((short) 1);
 			ps.setFitWidth((short) 1);
