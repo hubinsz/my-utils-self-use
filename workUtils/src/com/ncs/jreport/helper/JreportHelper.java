@@ -41,7 +41,7 @@ public class JreportHelper {
 
 	@Test
 	public void run001getCode() throws Exception {
-		int recordNum = 0;
+		int recordNum = 0;//test hubin 2011-07-21
 		connection = DriverManager.getConnection(dbUrl, userName, password);
 		statement = connection.createStatement();
 		String sql = "select count(1) from tbl_code_int_grp t where t.CODETYPE_ID = '"
