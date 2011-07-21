@@ -1,0 +1,6 @@
+===***===sn001[delete file]======
+		/*
+		 * File file = new File("fls/Book2.xls"); if(file.exists()){
+		 * file.delete(); }
+		 */
+=========sn001[delete file]======
