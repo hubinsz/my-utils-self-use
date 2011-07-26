@@ -8,7 +8,7 @@ import java.util.Map;
 public class MyDataSet {
 	
 	private int recordCount;
-	private Map<String, Object> lableMap = new HashMap<String, Object>();
+	private ArrayList<String> lableList = new ArrayList<String>();
 	private List<HashMap> dataList = new ArrayList<HashMap>();
 	
 	public int getDatasetRowsCount(){
@@ -18,4 +18,34 @@ public class MyDataSet {
 	public HashMap<String, Object> getRecord(int i) {
 		return dataList.get(i);
 	}
+	
+	public String getLabel(int i){
+		return lableList.get(i);
+	}
+
+	public int getRecordCount() {
+		return recordCount;
+	}
+
+	public void setRecordCount(int recordCount) {
+		this.recordCount = recordCount;
+	}
+
+	public ArrayList<String> getLableList() {
+		return lableList;
+	}
+
+	public void setLableList(ArrayList<String> lableList) {
+		this.lableList = lableList;
+	}
+
+	public List<HashMap> getDataList() {
+		return dataList;
+	}
+
+	public void setDataList(List<HashMap> dataList) {
+		this.dataList = dataList;
+	}
+	
+	
 }
