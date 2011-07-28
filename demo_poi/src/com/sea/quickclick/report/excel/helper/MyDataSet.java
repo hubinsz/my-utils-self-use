@@ -9,7 +9,7 @@ public class MyDataSet {
 	
 	private int recordCount;
 	private ArrayList<String> lableList = new ArrayList<String>();
-	private List<HashMap> dataList = new ArrayList<HashMap>();
+	private List<HashMap<String,Object>> dataList = new ArrayList<HashMap<String,Object>>();
 	
 	public int getDatasetRowsCount(){
 		return recordCount;
@@ -24,7 +24,7 @@ public class MyDataSet {
 	}
 
 	public int getRecordCount() {
-		return recordCount;
+		return dataList.size();
 	}
 
 	public void setRecordCount(int recordCount) {
@@ -39,11 +39,11 @@ public class MyDataSet {
 		this.lableList = lableList;
 	}
 
-	public List<HashMap> getDataList() {
+	public List<HashMap<String,Object>> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(List<HashMap> dataList) {
+	public void setDataList(List<HashMap<String,Object>> dataList) {
 		this.dataList = dataList;
 	}
 	
