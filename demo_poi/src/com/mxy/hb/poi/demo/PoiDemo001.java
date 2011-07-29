@@ -550,6 +550,29 @@ public class PoiDemo001 {
 		fileOut.close();
 
 	}
+	// Reading and Rewriting Workbooks
+	@Test
+	public void parseExistingFile() throws Exception {
+		InputStream inp = new FileInputStream("fls/workbook003.xls");
+		// InputStream inp = new FileInputStream("workbook.xlsx");
+		
+		Workbook wb = new HSSFWorkbook(inp);
+		Sheet sheet = wb.getSheetAt(0);
+		Row row = sheet.getRow(2);
+		Cell cell = row.getCell(3);
+		logger.info("row.getHeight() --> "+row.getHeight());
+		logger.info("row.getHeightInPoints() --> "+row.getHeightInPoints());
+		logger.info("sheet.getColumnWidth(0) --> "+ sheet.getColumnWidth(0));
+		if(sheet.getColumnWidth(0)<2048){
+			sheet.setColumnWidth(0, 2048);
+		}
+		logger.info("sheet.getDefaultColumnWidth() --> "+sheet.getDefaultColumnWidth());
+		inp.close();
+		FileOutputStream fileOut = new FileOutputStream("fls/workbook003.xls");
+		wb.write(fileOut);
+		fileOut.close();
+
+	}
 
 	// Using newlines in cells
 	@Test
@@ -602,7 +625,7 @@ public class PoiDemo001 {
 		cell = row.createCell(colNum);
 		cell.setCellValue(11111.25);
 		style = wb.createCellStyle();
-		style.setDataFormat(format.getFormat("#,##0.0000"));
+		style.setDataFormat(format.getFormat("###,###,##0.0000"));
 		cell.setCellStyle(style);
 
 		sheet.autoSizeColumn((short) 0);
